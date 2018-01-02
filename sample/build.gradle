@@ -52,8 +52,7 @@ task copyReleaseOutputs(type:Copy){
 
     into new File(rootDir, 'build-outputs')
 }
-
-assembleRelease<<{
+task assembleReleaseFile <<{
     copyReleaseOutputs.execute()
 }
 
@@ -134,29 +133,29 @@ def repackApk(originApk, targetApk){
 // 但第一级+第二级已经会导致主dex超标。
 // 所以在此hack修改CreateManifestKeepList类，让它不要顾忌activity、service、receiver
 // 以保障主dex足够小不至于爆掉
-def patchKeepSpecs() {
-    def taskClass = "com.android.build.gradle.internal.tasks.multidex.CreateManifestKeepList";
-    def clazz = this.class.classLoader.loadClass(taskClass)
-    def keepSpecsField = clazz.getDeclaredField("KEEP_SPECS")
-    keepSpecsField.setAccessible(true)
-    def keepSpecsMap = (Map) keepSpecsField.get(null)
-    if (keepSpecsMap.remove("activity") != null) {
-        // println "KEEP_SPECS patched: removed 'activity' root"
-    } else {
-        // println "Failed to patch KEEP_SPECS: no 'activity' root found"
-    }
-    if (keepSpecsMap.remove("service") != null) {
-        // println "KEEP_SPECS patched: removed 'service' root"
-    } else {
-        // println "Failed to patch KEEP_SPECS: no 'service' root found"
-    }
-    if (keepSpecsMap.remove("receiver") != null) {
-        // println "KEEP_SPECS patched: removed 'receiver' root"
-    } else {
-        // println "Failed to patch KEEP_SPECS: no 'receiver' root found"
-    }
-}
-patchKeepSpecs()
+//def patchKeepSpecs() {
+//    def taskClass = "com.android.build.gradle.internal.tasks.multidex.CreateManifestKeepList";
+//    def clazz = this.class.classLoader.loadClass(taskClass)
+//    def keepSpecsField = clazz.getDeclaredField("KEEP_SPECS")
+//    keepSpecsField.setAccessible(true)
+//    def keepSpecsMap = (Map) keepSpecsField.get(null)
+//    if (keepSpecsMap.remove("activity") != null) {
+//        // println "KEEP_SPECS patched: removed 'activity' root"
+//    } else {
+//        // println "Failed to patch KEEP_SPECS: no 'activity' root found"
+//    }
+//    if (keepSpecsMap.remove("service") != null) {
+//        // println "KEEP_SPECS patched: removed 'service' root"
+//    } else {
+//        // println "Failed to patch KEEP_SPECS: no 'service' root found"
+//    }
+//    if (keepSpecsMap.remove("receiver") != null) {
+//        // println "KEEP_SPECS patched: removed 'receiver' root"
+//    } else {
+//        // println "Failed to patch KEEP_SPECS: no 'receiver' root found"
+//    }
+//}
+//patchKeepSpecs()
 
 
 // dex命令默认保障方法数索引不超过65535，

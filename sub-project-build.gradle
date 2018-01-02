@@ -142,7 +142,7 @@ task compileRelease(type: JavaCompile,dependsOn:'aaptRelease') {
 
     destinationDir = file("$buildDir/intermediates/classes")
 
-    dependencyCacheDir = file("${buildDir}/dependency-cache")
+//    dependencyCacheDir = file("${buildDir}/dependency-cache")
 
     source = files(fileTree("$projectDir/src").include('**/*.java'),
             fileTree("$buildDir/gen/r").include('**/*.java'))
